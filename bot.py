@@ -3,10 +3,10 @@ import handlers
 import asyncio
 from aiogram import Bot, Dispatcher
 from config_reader import config
-from aiogram.client.default import DefaultBotProperties
 
 
-bot = Bot(config.bot_token.get_secret_value(), default=DefaultBotProperties(parse_mode="MarkDown"))
+
+bot = Bot(config.bot_token.get_secret_value(), parse_mode='MarkDown')
 dp = Dispatcher()
 
 logging.basicConfig(level=logging.INFO)

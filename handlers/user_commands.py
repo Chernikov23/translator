@@ -3,9 +3,16 @@ from aiogram.types import Message
 from aiogram.filters import CommandStart, Command
 from keyboards import inline
 from utils.db import *
-import json
-import google.generativeai as genai
+import os, json
 router = Router()
+
+
+async def get_message(key, lang_code):
+    file_path = os.path.join(os.path.join(os.path.dirname(__file__), 'locales'), f"{lang_code}.json")
+    with open(file_path, "r", encoding="utf-8") as file:
+        data = json.load(file)
+    return data.get(key)
+
 
 @router.message(CommandStart())
 async def start(msg: Message):
@@ -20,9 +27,9 @@ async def start(msg: Message):
         cursor_users.execute('INSERT INTO users (username, chat_id, registration_date) VALUES (?, ?, ?)', 
                         (username, chat_id, registration_date))
         conn_users.commit()
-        await msg.answer("Это бот переводчик! Чтобы переводить - нажмите на кнопку. Также вы можете переводить голосовые сообщения (работает на русском языке)", reply_markup=inline.main)
+        await msg.answer(text=await get_message("start", msg.from_user.language_code), reply_markup=inline.main if msg.from_user.language_code == 'ru' else inline.main_en)
     else:
-        await msg.answer("Это бот переводчик! Чтобы переводить - нажмите на кнопку. Также вы можете переводить голосовые сообщения (работает на русском языке)", reply_markup=inline.main)
+        await msg.answer(text=await get_message("start", msg.from_user.language_code), reply_markup=inline.main if msg.from_user.language_code == 'ru' else inline.main_en)
 
 
 

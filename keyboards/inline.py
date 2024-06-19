@@ -12,6 +12,18 @@ main = InlineKeyboardMarkup(
     ]
 )
 
+main_en = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="📖Translate", callback_data="translate"),
+            InlineKeyboardButton(text="Vocabluary", callback_data="vocabulary")
+        ],
+        [
+            InlineKeyboardButton(text="Quiz", callback_data="quiz")
+        ]
+    ]
+)
+
 langs = InlineKeyboardMarkup(
     inline_keyboard=[
         [
@@ -29,6 +41,22 @@ langs = InlineKeyboardMarkup(
     ]
 )
 
+langs_en = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="🇷🇺RU", callback_data="lang_ru"),
+            InlineKeyboardButton(text="🇬🇧EN", callback_data="lang_en")
+        ],
+        [
+            InlineKeyboardButton(text="🇩🇪DE", callback_data="lang_de"),
+            InlineKeyboardButton(text="🇨🇳ZH", callback_data="lang_zh")
+        ],
+        [
+            InlineKeyboardButton(text="🔙Back", callback_data="back"),
+            InlineKeyboardButton(text="Save word", callback_data="save_word")
+        ]
+    ]
+)
 
 
 vocabulary_languages = InlineKeyboardMarkup(
@@ -47,6 +75,24 @@ vocabulary_languages = InlineKeyboardMarkup(
     ]
 )
 
+
+vocabulary_languages_en = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Russian", callback_data="vocab_ru"),
+            InlineKeyboardButton(text="English", callback_data="vocab_en")
+        ],
+        [
+            InlineKeyboardButton(text="German", callback_data="vocab_de"),
+            InlineKeyboardButton(text="Chinese", callback_data="vocab_zh")
+        ],
+        [
+            InlineKeyboardButton(text="Back", callback_data="back")
+        ]
+    ]
+)
+
+
 stop_quiz = InlineKeyboardMarkup(
     inline_keyboard=[
         [
@@ -54,3 +100,12 @@ stop_quiz = InlineKeyboardMarkup(
         ]
     ]
 )
+
+stop_quiz_en = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Stop quiz", callback_data="stop_quiz")
+        ]
+    ]
+)
+

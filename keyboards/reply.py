@@ -15,5 +15,19 @@ languages = ReplyKeyboardMarkup(
     one_time_keyboard=True
 )
 
+languages_en = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Russian"),
+            KeyboardButton(text="English")
+        ],
+        [
+            KeyboardButton(text='Chinese'),
+            KeyboardButton(text='German')
+        ]
+    ],
+    resize_keyboard=True,
+    one_time_keyboard=True
+)
 
 # rmk = ReplyKeyboardRemove()
