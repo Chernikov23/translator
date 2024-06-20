@@ -32,7 +32,8 @@ langs = InlineKeyboardMarkup(
         ],
         [
             InlineKeyboardButton(text="🇩🇪DE", callback_data="lang_de"),
-            InlineKeyboardButton(text="🇨🇳ZH", callback_data="lang_zh")
+            InlineKeyboardButton(text="🇨🇳ZH", callback_data="lang_zh"),
+            InlineKeyboardButton(text="🇪🇸ES", callback_data="lang_es")
         ],
         [
             InlineKeyboardButton(text="🔙Назад", callback_data="lang_back"),
@@ -70,6 +71,7 @@ vocabulary_languages = InlineKeyboardMarkup(
             InlineKeyboardButton(text="Китайский", callback_data="vocab_zh")
         ],
         [
+            InlineKeyboardButton(text="Испанский", callback_data="vocab_es"),
             InlineKeyboardButton(text="Назад", callback_data="back")
         ]
     ]
@@ -87,6 +89,7 @@ vocabulary_languages_en = InlineKeyboardMarkup(
             InlineKeyboardButton(text="Chinese", callback_data="vocab_zh")
         ],
         [
+            InlineKeyboardButton(text="Spanis", callback_data="vocab_es"),
             InlineKeyboardButton(text="Back", callback_data="back")
         ]
     ]

@@ -4,7 +4,8 @@ languages = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="Русский"),
-            KeyboardButton(text="Английский")
+            KeyboardButton(text="Английский"),
+            KeyboardButton(text="Испанский")
         ],
         [
             KeyboardButton(text='Китайский'),
@@ -19,7 +20,8 @@ languages_en = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="Russian"),
-            KeyboardButton(text="English")
+            KeyboardButton(text="English"),
+            KeyboardButton(text="Spanish")
         ],
         [
             KeyboardButton(text='Chinese'),

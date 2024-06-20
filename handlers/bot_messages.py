@@ -1,5 +1,5 @@
 from aiogram import Router, Bot, F 
-from aiogram.types import Message, CallbackQuery, ContentType
+from aiogram.types import Message, CallbackQuery, ContentType, FSInputFile
 from gpytranslate import Translator, SyncTranslator
 from config_reader import config
 from aiogram.fsm.context import FSMContext
@@ -10,6 +10,7 @@ import speech_recognition as sr
 import speech_recognition as sr
 from utils.db import *
 import random
+from gtts import gTTS
 
 
 recognizer = sr.Recognizer()
@@ -33,6 +34,8 @@ def get_language_name(lang_code, code):
         return 'русском' if code == 'ru' else "russian"
     elif lang_code == 'zh':
         return 'китайском' if code =='ru' else "chinese"
+    elif lang_code == 'es':
+        return 'испанском' if code == 'ru' else "spanish"
     return lang_code
 
 @router.callback_query(F.data == "translate")
@@ -59,6 +62,8 @@ async def send_translate(msg: Message, state: FSMContext):
         lng='zh'
     elif lng == 'Английский' or lng == "English":
         lng = 'en'
+    elif lng == 'Испанский' or lng == 'Spanish':
+        lng = 'es'
     await state.update_data(lang=lng) 
     data = await state.get_data() 
     word = data.get('word') 
@@ -73,8 +78,13 @@ async def send_translate(msg: Message, state: FSMContext):
         lang = 'русском' if msg.from_user.language_code == 'ru' else "russian"
     elif lang == 'zh':
         lang == 'китайском' if msg.from_user.language_code == 'ru' else "chinese"
-    await msg.answer(text=str(await get_message("res", msg.from_user.language_code)).format(word, lang, translated_text), reply_markup=inline.langs if msg.from_user.language_code == 'ru' else inline.langs_en)
+    elif lang == 'es':
+        lang == 'испанском' if msg.from_user.language_code == 'ru' else 'spanish'
+    tts = gTTS(translated_text, lang=lng)
+    tts.save('translated_audio.mp3')
+    await bot.send_audio(chat_id=msg.chat.id, audio=FSInputFile("translated_audio.mp3"), caption=str(await get_message("res", msg.from_user.language_code)).format(word, lang, translated_text), reply_markup=inline.langs if msg.from_user.language_code == 'ru' else inline.langs_en)
     await state.set_state(Translate.active)
+    os.remove("translated_audio.mp3")
     
     
     
@@ -123,20 +133,29 @@ async def proc_callbacks(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_text(text=await get_message("start", callback.from_user.language_code), reply_markup=inline.main if callback.from_user.language_code == 'ru' else inline.main_en)
         await state.clear()
     elif call_data.startswith('lang_'):
+        await callback.message.delete()
         langs = call_data.split("lang_")[1]
         data = await state.get_data()
         word = data.get('word')
+        lang_text = ''
         translation = t.translate(text=word, targetlang=langs)
         translated_text = translation.text
         if langs == 'de':
-            langs = 'немецком' if callback.from_user.language_code == "ru" else 'german'
+            lang_text = 'немецком' if callback.from_user.language_code == "ru" else 'german'
         elif langs == 'en':
-            langs = 'английском' if callback.from_user.language_code == 'ru' else 'english'
+            lang_text = 'английском' if callback.from_user.language_code == 'ru' else 'english'
         elif langs == 'ru':
-            langs = 'русском' if callback.from_user.language_code == 'ru' else "russian"
+            lang_text = 'русском' if callback.from_user.language_code == 'ru' else "russian"
         elif langs == 'zh':
-            langs == 'китайском' if callback.from_user.language_code == 'ru' else "chinese"
-        await callback.message.edit_text(text=str(await get_message("res", callback.from_user.language_code)).format(word, langs, translated_text), reply_markup=inline.langs if callback.from_user.language_code == 'ru' else inline.langs_en)
+            lang_text == 'китайском' if callback.from_user.language_code == 'ru' else "chinese"
+        elif langs == 'es':
+            lang_text == 'испанском' if callback.from_user.language_code == 'ru' else "spanish"
+        tts = gTTS(translated_text, lang=langs)
+        tts.save('translated_audio.mp3')
+        
+
+        await bot.send_audio(chat_id=callback.message.chat.id, audio=FSInputFile('translated_audio.mp3'), caption=str(await get_message("res", callback.from_user.language_code)).format(word, lang_text, translated_text), reply_markup=inline.langs if callback.from_user.language_code == 'ru' else inline.langs_en)
+        os.remove('translated_audio.mp3')
         await state.set_state(Translate.active)
         
         
