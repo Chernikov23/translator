@@ -50,7 +50,8 @@ langs_en = InlineKeyboardMarkup(
         ],
         [
             InlineKeyboardButton(text="🇩🇪DE", callback_data="lang_de"),
-            InlineKeyboardButton(text="🇨🇳ZH", callback_data="lang_zh")
+            InlineKeyboardButton(text="🇨🇳ZH", callback_data="lang_zh"),
+            InlineKeyboardButton(text="🇪🇸ES", callback_data="lang_es")
         ],
         [
             InlineKeyboardButton(text="🔙Back", callback_data="back"),
