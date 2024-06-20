@@ -83,7 +83,7 @@ async def send_translate(msg: Message, state: FSMContext):
     tts = gTTS(translated_text, lang=lng)
     tts.save('translated_audio.mp3')
     await bot.send_audio(chat_id=msg.chat.id, audio=FSInputFile("translated_audio.mp3"), caption=str(await get_message("res", msg.from_user.language_code)).format(word, lang, translated_text), reply_markup=inline.langs if msg.from_user.language_code == 'ru' else inline.langs_en)
-    await state.set_state(Translate.active)
+    await state.set_state(Translate.word)
     os.remove("translated_audio.mp3")
     
     
@@ -156,7 +156,7 @@ async def proc_callbacks(callback: CallbackQuery, state: FSMContext):
 
         await bot.send_audio(chat_id=callback.message.chat.id, audio=FSInputFile('translated_audio.mp3'), caption=str(await get_message("res", callback.from_user.language_code)).format(word, lang_text, translated_text), reply_markup=inline.langs if callback.from_user.language_code == 'ru' else inline.langs_en)
         os.remove('translated_audio.mp3')
-        await state.set_state(Translate.active)
+        await state.set_state(Translate.word)
         
         
 @router.message(Translate.quiz)
@@ -244,5 +244,8 @@ async def messages(msg: Message, state: FSMContext):
 
         
 @router.message()
-async def messages(msg: Message):
-    await msg.answer(text= await get_message("noCan", msg.from_user.language_code), reply_markup=inline.main)
+async def messages(msg: Message, state: FSMContext):
+    await state.set_state(Translate.word)
+    await state.update_data(word=msg.text)
+    await state.set_state(Translate.lang)
+    await msg.answer(text= await get_message("chLang", msg.from_user.language_code), reply_markup=reply.languages if msg.from_user.language_code == 'ru' else reply.languages_en)
